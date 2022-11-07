@@ -26,7 +26,12 @@ class MainViewModel constructor(
 
             withContext(Dispatchers.Main) {
                 if (response.isSuccessful && !response.body().isNullOrEmpty()) {
-                    val cakes = response.body()
+                    val cakes = response.body()?.filter {
+                        !(it.image.isEmpty() || it.title.isEmpty() || it.desc.isEmpty())
+                    }?.distinct()?.sortedBy {
+                        it.title
+                    }
+
                     _state.postValue(
                         _state.value?.copy(
                             error = null,

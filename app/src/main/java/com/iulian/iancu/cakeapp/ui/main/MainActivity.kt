@@ -84,6 +84,7 @@ class MainActivity : ComponentActivity() {
                     add(GifDecoder.Factory())
                 }
             }
+            .error(drawable.ic_baseline_signal_wifi_off_24)
             .build()
         CakeAppTheme {
             Surface(color = MaterialTheme.colors.background) {
