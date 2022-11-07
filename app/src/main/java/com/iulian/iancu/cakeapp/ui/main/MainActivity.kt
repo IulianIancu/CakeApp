@@ -52,7 +52,7 @@ class MainActivity : ComponentActivity() {
         setContent {
             Content()
         }
-        viewModel.getCatFacts()
+        viewModel.getCakeList()
     }
 
     private fun onStateChange(state: State?) {

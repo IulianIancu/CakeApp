@@ -27,10 +27,10 @@ class MainViewModel constructor(
     private var job: Job? = null
 
     fun refresh() {
-        getCatFacts()
+        getCakeList()
     }
 
-    fun getCatFacts() {
+    fun getCakeList() {
         job = CoroutineScope(Dispatchers.IO + exceptionHandler).launch {
             _isRefreshing.emit(true)
             val response = cakeListRepository.getCakeList()
