@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">CakeApp</string>
+    <string name="network_error">Could not connect to the internet</string>
+    <string name="unknown_error">Unknown error, please try again later</string>
 </resources>
