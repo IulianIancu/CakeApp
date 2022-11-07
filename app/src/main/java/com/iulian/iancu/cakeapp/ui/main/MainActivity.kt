@@ -1,3 +1,5 @@
+@file:OptIn(ExperimentalMaterialApi::class)
+
 package com.iulian.iancu.cakeapp.ui.main
 
 import android.os.Build
@@ -5,17 +7,13 @@ import android.os.Bundle
 import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.Card
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Surface
-import androidx.compose.material.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
+import androidx.compose.material.*
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
@@ -112,7 +110,14 @@ class MainActivity : ComponentActivity() {
                                     .fillMaxWidth()
                                     .padding(8.dp)
                             ) {
-                                Box(Modifier.fillMaxSize()) {
+                                val openDialog = remember { mutableStateOf(false) }
+                                Box(
+                                    modifier = Modifier
+                                        .fillMaxSize()
+                                        .clickable {
+                                            openDialog.value = !openDialog.value
+                                        }
+                                ) {
                                     Column(horizontalAlignment = Alignment.CenterHorizontally) {
                                         AsyncImage(
                                             modifier = Modifier
@@ -125,6 +130,9 @@ class MainActivity : ComponentActivity() {
                                             imageLoader = imageLoader
                                         )
                                         Text(text = it.title, Modifier.padding(4.dp))
+                                        if (openDialog.value) {
+                                            Text(text = it.desc, Modifier.padding(4.dp))
+                                        }
                                     }
                                 }
                             }
