@@ -6,6 +6,9 @@ import androidx.lifecycle.ViewModel
 import com.iulian.iancu.cakeapp.data.Cake
 import com.iulian.iancu.cakeapp.data.CakeListRepository
 import kotlinx.coroutines.*
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 
 class MainViewModel constructor(
     //TODO Inject with dagger instead of this nonsense
@@ -13,15 +16,23 @@ class MainViewModel constructor(
 ) : ViewModel() {
     private val _state = MutableLiveData(State(null, null))
     val state: LiveData<State> get() = _state
+    val isRefreshing: StateFlow<Boolean>
+        get() = _isRefreshing.asStateFlow()
 
+    private val _isRefreshing = MutableStateFlow(false)
     private val exceptionHandler = CoroutineExceptionHandler { _, _ ->
         _state.postValue(_state.value?.copy(error = Error.Unknown))
     }
 
     private var job: Job? = null
 
+    fun refresh() {
+        getCatFacts()
+    }
+
     fun getCatFacts() {
         job = CoroutineScope(Dispatchers.IO + exceptionHandler).launch {
+            _isRefreshing.emit(true)
             val response = cakeListRepository.getCakeList()
 
             withContext(Dispatchers.Main) {
@@ -41,6 +52,7 @@ class MainViewModel constructor(
                 } else {
                     _state.postValue(_state.value?.copy(error = Error.Network))
                 }
+                _isRefreshing.emit(false)
             }
         }
     }
